@@ -95,3 +95,59 @@ class BooksList:
         self.results = parse.results_object(self.data)
         l.debug(f"number of results objects made {len(self.results)}")
 
+class HighlistsList:
+    def __init__(self):
+        self.token = os.getenv('ReadwiseToken')
+        self.data = None
+        self.results = []
+
+        #paramaters for search
+        self.page_size = None
+        self.page = None
+        self.book_id = None
+        self.updated__lt = None
+        self.updated__gt = None
+        self.highlighted_at__lt = None
+        self.highlighted_at__gt = None
+
+        l.debug(f"self.token: {self.token}")
+        return None
+
+    def __str__(self):
+        print(f"token : {self.token}")
+        print(f"data : {self.data}")
+        print(f"results : {self.results}")
+
+        print(f"page_size : {self.page_size}")
+        print(f"page : {self.page}")
+        print(f"book id : {self.book_id}")
+        print(f"updated__lt : {self.updated__lt}")
+        print(f"updated_gt : {self.updated__gt}")
+        print(f"highlighted_at__lt : {self.highlighted_at__lt}")
+        print(f"highlighted_at__gt : {self.highlighted_at__gt}")
+        return "\n"
+
+    def makeRequest(self):
+        # getting highlights from a particular book
+        # made after February 1st, 2020, 21:35:53 UTC
+        #querystring = {
+        #    "category":self.category
+        #}
+
+        response = requests.get(
+            url="https://readwise.io/api/v2/highlights/",
+            headers={"Authorization": f"Token {self.token}"},
+            #params=querystring
+        )
+
+        self.data = response.json()
+        l.info("response data: ")
+        l.info(self.data)
+
+        self.add_results()
+
+        return None
+
+    def add_results(self):
+        self.results = parse.results_object_highlights(self.data)
+        l.debug(f"number of results objects made {len(self.results)}")

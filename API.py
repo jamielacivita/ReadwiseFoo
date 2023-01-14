@@ -46,7 +46,7 @@ class BooksList:
         #query paramaters
         self.page_size = None
         self.page = None
-        self.catagory = None
+        self.category = None
         self.source = None
         self.num_highlights = None
         self.num_highlights__lt = None
@@ -57,6 +57,10 @@ class BooksList:
         self.last_highlight_at__gt = None
 
         l.debug(f"self.token: {self.token}")
+        return None
+
+    def set_category(self, category):
+        self.category = category
         return None
 
     def __str__(self):
@@ -72,7 +76,7 @@ class BooksList:
         # getting highlights from a particular book
         # made after February 1st, 2020, 21:35:53 UTC
         querystring = {
-            "category":"books"
+            "category":self.category
         }
 
         response = requests.get(

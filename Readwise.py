@@ -1,5 +1,15 @@
 import API
-import parse
+
+class HighlightsList:
+    def __init__(self):
+        hl = API.HighlistsList()
+
+    def request(self):
+        hl.makeRequest()
+
+    def print_results(self):
+        print(hl)
+
 
 def foo():
     return "foo"
@@ -8,6 +18,7 @@ def main():
     print("JWTO")
 
 if __name__ == "__main__":
+    main()
 
     #bl = API.BooksList() #create the BooksList API object.
     #bl.set_category("books")

@@ -1,3 +1,5 @@
+import datetime
+
 class Result:
     def __init__(self):
         self.asin = None
@@ -71,4 +73,28 @@ class Result_Highlight:
         print(f"url : {self.url}")
         return("\n")
 
+    def print_simple(self):
+        print(f"{self.highlighted_at} : {self.text} ({self.note})\n")
+        return("\n")
+
+    def print_simple_delta(self):
+        print(f"{calculate_time_delta(self.highlighted_at)} : {self.text} ({self.note})\n")
+        return("\n")
+
+## Helper Function Go Here
+
+def calculate_time_delta(input_time="2023-01-23T21:40:22.320832Z"):
+    """
+
+    :param input_time: A time string in the format 2023-01-23T21:40:22.320832Z
+    :return: A time delta like 4 days, 20:45:53.472612
+    """
+    print("In calculate time delta.")
+    #we need to remove the trailing Z from the timestamp becasue the datetime function wont parse it correctly with it.
+    input_time = input_time.split("Z")[0]
+    d = datetime.datetime.fromisoformat(input_time)
+    #d is a datetime.datetime object.
+    n = datetime.datetime.utcnow()
+    delta = n-d
+    return delta
 

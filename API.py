@@ -2,6 +2,7 @@ import requests
 import os
 import logging
 import parse
+import datetime
 
 formatString = "%(asctime)s in %(name)s > %(message)s"
 fo = logging.Formatter(formatString)
@@ -128,16 +129,16 @@ class HighlistsList:
         return "\n"
 
     def makeRequest(self):
-        # getting highlights from a particular book
-        # made after February 1st, 2020, 21:35:53 UTC
-        #querystring = {
-        #    "category":self.category
-        #}
+        querystring = {
+            #"category":self.category,
+            "highlighted_at__lt":self.highlighted_at__lt,
+            "highlighted_at__gt":self.highlighted_at__gt
+        }
 
         response = requests.get(
             url="https://readwise.io/api/v2/highlights/",
             headers={"Authorization": f"Token {self.token}"},
-            #params=querystring
+            params=querystring
         )
 
         self.data = response.json()
@@ -151,3 +152,33 @@ class HighlistsList:
     def add_results(self):
         self.results = parse.results_object_highlights(self.data)
         l.debug(f"number of results objects made {len(self.results)}")
+
+    def set_highlighted_at__lt(self, dateTime):
+        self.highlighted_at__lt = dateTime
+        return None
+
+    def set_highlighted_at__gt(self, dateTime):
+        self.highlighted_at__gt = dateTime
+        return None
+
+
+    def set_highlighted_before(self,year,month,day,hour,min,sec):
+        self.set_highlighted_at__lt(datetime.datetime(year,month,day,hour,min,sec,0).isoformat())
+
+
+    def set_highlighted_after(self,year,month,day,hour,min,sec):
+        self.set_highlighted_at__gt(datetime.datetime(year,month,day,hour,min,sec,0).isoformat())
+
+
+    def highlightedDaysAgo(self,daysAgo):
+        dt = datetime.datetime.utcnow() - datetime.timedelta(days=daysAgo)
+        self.set_highlighted_at__gt(dt)
+
+
+    def print_results_simple(self):
+        for r in self.results:
+            r.print_simple()
+
+    def print_results_simple_delta(self):
+        for r in self.results:
+            r.print_simple_delta()
